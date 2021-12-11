@@ -20,4 +20,4 @@ const VideoSchema = new mongoose.Schema({
 })
 
 
-module.exports = new mongoose.model("Videos", VideoSchema);
+module.exports = new mongoose.model("Video", VideoSchema);
