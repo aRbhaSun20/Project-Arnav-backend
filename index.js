@@ -4,8 +4,8 @@ const { GraphQLSchema } = require("graphql");
 const cors = require("cors");
 
 const mongoose = require("mongoose");
-const RootMutationType = require("./GraphQl/mutationQuery");
-const RootQueryType = require("./GraphQl/rootQuery");
+const RootMutationType = require("./graphQl/mutationQuery");
+const RootQueryType = require("./graphQl/rootQuery");
 require("dotenv").config();
 
 mongoose
@@ -37,9 +37,9 @@ app.use(
 
 app.use(express.static("public"));
 
-const routes = require("./Routes");
+// const routes = require("./Routes");
 
-app.use("/", routes);
+// app.use("/", routes);
 
 const port = process.env.PORT || 5000;
 
