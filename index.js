@@ -1,14 +1,7 @@
 const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
-const {
-  GraphQLSchema,
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLList,
-  GraphQLInt,
-  GraphQLNonNull,
-  GraphQLFloat,
-} = require("graphql");
+const { GraphQLSchema } = require("graphql");
+const cors = require("cors");
 
 const mongoose = require("mongoose");
 const RootMutationType = require("./GraphQl/mutationQuery");
@@ -18,6 +11,7 @@ require("dotenv").config();
 mongoose
   .connect(process.env.MONGODBURL, {
     useNewUrlParser: true,
+
     useUnifiedTopology: true,
   })
   .then((res) => console.log("connected to db"))
@@ -30,6 +24,9 @@ const schema = new GraphQLSchema({
   mutation: RootMutationType,
 });
 
+app.use(express.json());
+app.use(cors());
+
 app.use(
   "/graphql",
   graphqlHTTP({
@@ -39,6 +36,10 @@ app.use(
 );
 
 app.use(express.static("public"));
+
+const routes = require("./Routes");
+
+app.use("/", routes);
 
 const port = process.env.PORT || 5000;
 

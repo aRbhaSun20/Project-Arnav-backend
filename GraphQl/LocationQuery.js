@@ -6,38 +6,23 @@ const {
     GraphQLNonNull,
     GraphQLFloat,
 } = require("graphql");
+const { userSchema, userType } = require("./UserQuery");
 
 const LocationSchema = {
     _id: {
         type: GraphQLString,
     },
-    name: {
+    placeName: {
         type: GraphQLNonNull(GraphQLString),
-        description: "Name of User",
+        description: "Name of place",
     },
-    email: {
+    coordinates: {
         type: GraphQLNonNull(GraphQLString),
-        description: "Email of User",
+        description: "Coordinates of location",
     },
-    age: {
-        type: GraphQLInt,
-        description: "Age of User",
-    },
-    password: {
+    userId: {
         type: GraphQLNonNull(GraphQLString),
-        description: "Name of User",
-    },
-    createdAt: {
-        type: GraphQLString,
-        description: "Created User At",
-    },
-    location: {
-        type: GraphQLNonNull(GraphQLList(GraphQLFloat)),
-        description: "Location of User",
-    },
-    alerts: {
-        type: GraphQLList(GraphQLString),
-        description: "Alerts for users",
+        description: "Associated User Created",
     },
 };
 

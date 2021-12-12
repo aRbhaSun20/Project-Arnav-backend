@@ -23,13 +23,13 @@ const userSchema = {
     type: GraphQLInt,
     description: "Age of User",
   },
-  password: {
-    type: GraphQLNonNull(GraphQLString),
-    description: "Name of User",
-  },
   createdAt: {
     type: GraphQLString,
     description: "Created User At",
+  },
+  password: {
+    type: GraphQLString,
+    description: "Password of User",
   },
   location: {
     type: GraphQLNonNull(GraphQLList(GraphQLFloat)),
@@ -38,6 +38,10 @@ const userSchema = {
   alerts: {
     type: GraphQLList(GraphQLString),
     description: "Alerts for users",
+  },
+  token: {
+    type: GraphQLString,
+    description: "token for user",
   },
 };
 
@@ -73,6 +77,10 @@ const userOptionalSchema = {
     type: GraphQLList(GraphQLString),
     description: "Alerts for users",
   },
+  token: {
+    type: GraphQLString,
+    description: "token for user",
+  },
 };
 
 const userType = new GraphQLObjectType({
@@ -81,4 +89,4 @@ const userType = new GraphQLObjectType({
   fields: () => ({ ...userSchema }),
 });
 
-module.exports = { userType, userSchema,userOptionalSchema };
+module.exports = { userType, userSchema, userOptionalSchema };

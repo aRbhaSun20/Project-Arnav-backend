@@ -9,6 +9,10 @@ const {
 const Users = require("../models/Users");
 const { userType, userSchema, userOptionalSchema } = require("./UserQuery");
 
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+require("dotenv").config();
+
 const RootMutationType = new GraphQLObjectType({
   name: "Mutations",
   description: "Root Mutations",
@@ -44,10 +48,36 @@ const RootMutationType = new GraphQLObjectType({
       type: userType,
       description: "Delete User",
       args: {
-        _id: { type: GraphQLNonNull(GraphQLString) },
+        user: { type: GraphQLNonNull(GraphQLString) },
+        password: { type: GraphQLNonNull(GraphQLString) },
       },
       resolve: async (parent, args) => {
         return await Users.findOneAndRemove({ _id: args._id });
+      },
+    },
+    login: {
+      type: userType,
+      description: "login User",
+      args: {
+        user: { type: GraphQLNonNull(GraphQLString) },
+        password: { type: GraphQLNonNull(GraphQLString) },
+      },
+      resolve: async (parent, args) => {
+        const user = await Users.findOne({ name: args.user });
+
+        if (!user) {
+          throw new Error("No user with that email");
+        }
+        if (args.password === user._doc.password) {
+          const token = jwt.sign(
+            { _id: user._id, email: user.email, password: user.password },
+            process.env.ACCESS_TOKEN_SECRET
+          );
+
+          return { ...user._doc, token };
+        } else {
+          throw new Error("Incorrect password");
+        }
       },
     },
   }),
