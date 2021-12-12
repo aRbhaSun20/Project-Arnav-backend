@@ -2,6 +2,7 @@ const { GraphQLObjectType } = require("graphql");
 const { locationMutation } = require("./Mutation/locationMutation");
 
 const { userMutation } = require("./Mutation/userMutation");
+const { videoMutation } = require("./Mutation/videoMutation");
 require("dotenv").config();
 
 const RootMutationType = new GraphQLObjectType({
@@ -10,6 +11,7 @@ const RootMutationType = new GraphQLObjectType({
   fields: () => ({
     ...userMutation,
     ...locationMutation,
+    ...videoMutation,
   }),
 });
 

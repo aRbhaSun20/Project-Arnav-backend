@@ -85,7 +85,7 @@ const userOptionalSchema = {
 
 const userType = new GraphQLObjectType({
   name: "Users",
-  description: "Users List",
+  description: "Users",
   fields: () => ({ ...userSchema }),
 });
 

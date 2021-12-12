@@ -38,14 +38,14 @@ const locationOptionalSchema = {
     description: "Coordinates of location",
   },
   userId: {
-    type: userType,
+    type: GraphQLString,
     description: "Associated User Created",
   },
 };
 
 const LocationType = new GraphQLObjectType({
   name: "Location",
-  description: "Locations List",
+  description: "Locations",
   fields: () => ({ ...LocationSchema }),
 });
 
