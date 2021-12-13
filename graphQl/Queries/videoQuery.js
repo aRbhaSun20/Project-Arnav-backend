@@ -13,7 +13,7 @@ const videoQuery = {
       return await Video.findOne({ _id: args._id });
     },
   },
-  users: {
+  videos: {
     type: GraphQLList(videoType),
     description: "list of videos for location",
     resolve: async () => {
