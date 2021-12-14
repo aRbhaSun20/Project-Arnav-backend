@@ -1,4 +1,5 @@
 const express = require("express");
+
 const { graphqlHTTP } = require("express-graphql");
 const { GraphQLSchema } = require("graphql");
 const cors = require("cors");
@@ -24,6 +25,12 @@ const schema = new GraphQLSchema({
   mutation: RootMutationType,
 });
 
+app.set("view engine", "ejs");
+
+app.get("/", (req, res) => {
+  res.render("index");
+});
+
 app.use(express.json());
 app.use(cors());
 
@@ -41,6 +48,6 @@ app.use(express.static("public"));
 
 // app.use("/", routes);
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5300;
 
 app.listen(port, () => console.log(`Server started at port ${port}`));
