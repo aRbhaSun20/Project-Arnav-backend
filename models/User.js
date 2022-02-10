@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     default: () => DateTime.now().toString(),
   },
   location: {
-    type: [Float32Array],
+    type: [Number],
     required: true,
   },
   alerts: {
