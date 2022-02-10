@@ -28,13 +28,5 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.statics.login = async function (email) {
-  const user = await this.findOne({ email });
-  try {
-    return user;
-  } catch (e) {
-    console.log(e);
-  }
-};
 
 module.exports = new mongoose.model("Users", userSchema);

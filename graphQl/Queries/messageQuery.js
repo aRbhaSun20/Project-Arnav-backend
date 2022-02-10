@@ -3,21 +3,19 @@ const Message = require("../../models/Message");
 const { MessageType } = require("../Schemas/MessageSchema");
 
 const messageQuery = {
-  message: {
-    type: MessageType,
-    description: "single message ",
-    args: {
-      _id: { type: GraphQLNonNull(GraphQLString) },
-    },
-    resolve: async () => {
-      return Message.findOne({ _id: args._id });
-    },
-  },
   messages: {
     type: GraphQLList(MessageType),
-    description: "list of messages ",
-    resolve: async () => {
-      return await Message.find();
+    description: "list of message  between senders and receiver",
+    args: {
+      senderUserId: { type: GraphQLNonNull(GraphQLString) },
+      receiverUserId: { type: GraphQLNonNull(GraphQLString) },
+    },
+    resolve: async (parent, args) => {
+      const data = await Message.find({
+        senderUserId: { $eq: args.senderUserId },
+        receiverUserId: { $eq: args.receiverUserId },
+      });
+      return data;
     },
   },
 };

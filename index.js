@@ -8,7 +8,8 @@ const mongoose = require("mongoose");
 
 const RootMutationType = require("./graphQl/mutationQuery");
 const RootQueryType = require("./graphQl/rootQuery");
-const Authentication = require("./middlewares/Authentication");
+const { Authentication } = require("./middlewares/Authentication");
+const loginRouter = require("./routes/login");
 require("dotenv").config();
 
 mongoose
@@ -30,7 +31,9 @@ const schema = new GraphQLSchema({
 app.use(express.json());
 app.use(cors());
 
-// app.use(Authentication);
+app.use("/", loginRouter);
+
+app.use(Authentication);
 
 app.use(
   "/graphql",
