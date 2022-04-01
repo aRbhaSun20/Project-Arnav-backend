@@ -57,10 +57,13 @@ const upload = multer({ storage });
 
 const { graphqlHTTP } = require("express-graphql");
 const { GraphQLSchema } = require("graphql");
+
 const cors = require("cors");
 
 const RootMutationType = require("./graphQl/mutationQuery");
 const RootQueryType = require("./graphQl/rootQuery");
+const { Authentication } = require("./middlewares/Authentication");
+const loginRouter = require("./routes/login");
 require("dotenv").config();
 
 mongoose
@@ -89,6 +92,10 @@ app.get("/", (req, res) => {
 //@desc uploads file to DB
 app.use(express.json());
 app.use(cors());
+
+app.use("/", loginRouter);
+
+app.use(Authentication);
 
 app.use(
   "/graphql",
