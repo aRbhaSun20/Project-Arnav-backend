@@ -3,7 +3,7 @@ const { GraphQLUpload } = require("graphql-upload");
 
 const videoMutation = {
   uploadVideo: {
-    description: "Uploads an video.",
+    description: "Uploads a video.",
     type: GraphQLBoolean,
     args: {
       video: {
