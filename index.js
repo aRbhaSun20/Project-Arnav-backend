@@ -38,6 +38,7 @@ conn.once("open", () => {
 const storage = new GridFsStorage({
   url: mongoURI,
   file: (req, file) => {
+    console.log("Inside the file request!", req.query.location);
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {
         if (err) {
@@ -47,6 +48,7 @@ const storage = new GridFsStorage({
         const fileInfo = {
           filename: filename,
           bucketName: "uploads",
+          metadata: { locationName: req.query.location },
         };
         resolve(fileInfo);
       });
@@ -111,6 +113,7 @@ app.use(express.static("public"));
 //@desc: Uploads File to DB
 var router = express.Router();
 app.post("/upload", upload.single("file"), (req, res) => {
+  // Entire logic will come here
   res.redirect("/");
 });
 
@@ -121,6 +124,7 @@ app.get("/getFiles", (req, res) => {
     // Check if files
     if (!files || files.length === 0) {
       res.render("index", { files: false });
+      //return res.json({ files: [] });
     } else {
       files.map((file) => {
         if (
@@ -134,6 +138,7 @@ app.get("/getFiles", (req, res) => {
         }
       });
       res.render("index", { files: files });
+      //return res.json({ files: files });
     }
   });
 });
@@ -189,6 +194,18 @@ app.get("/video/:filename", (req, res) => {
         err: "Not a video",
       });
     }
+  });
+});
+
+// @route DELETE /files/:id
+// @desc  Delete file
+app.delete("/files/:id", (req, res) => {
+  gfs.remove({ _id: req.params.id, root: "uploads" }, (err, gridStore) => {
+    if (err) {
+      return res.status(404).json({ err: err });
+    }
+
+    res.redirect("/");
   });
 });
 
