@@ -15,9 +15,8 @@ const VideoSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  video: {
-    type: Buffer,
-    contentType: String,
+  video_id: {
+    type: String,
     required: true,
   },
 });

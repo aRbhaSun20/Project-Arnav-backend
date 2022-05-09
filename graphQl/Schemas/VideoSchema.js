@@ -12,45 +12,45 @@ const videoSchema = {
   _id: {
     type: GraphQLString,
   },
-  name: {
-    type: GraphQLNonNull(GraphQLString),
-    description: "Name for video",
-  },
-  createdAt: {
+  start: {
     type: GraphQLString,
-    description: "Created User At",
+    description: "start",
   },
-  location: {
-    type: GraphQLNonNull(GraphQLList(GraphQLString)),
-    description: "Location of User",
+  destination: {
+    type: GraphQLString,
+    description: "Destination",
   },
-  video: {
-    type: GraphQLNonNull(GraphQLUpload),
-    description: "videos location",
+  user_id: {
+    type: GraphQLString,
+    description: "User ID",
+  },
+  video_id: {
+    type: GraphQLString,
+    description: "videos ID",
   },
 };
 
-const videoOptionalSchema = {
-  _id: {
-    type: GraphQLString,
-  },
-  name: {
-    type: GraphQLString,
-    description: "Name for video",
-  },
-  createdAt: {
-    type: GraphQLString,
-    description: "Created User At",
-  },
-  location: {
-    type: GraphQLList(GraphQLString),
-    description: "Location of User",
-  },
-  video: {
-    type: GraphQLUpload,
-    description: "videos location",
-  },
-};
+// const videoOptionalSchema = {
+//   _id: {
+//     type: GraphQLString,
+//   },
+//   name: {
+//     type: GraphQLString,
+//     description: "Name for video",
+//   },
+//   createdAt: {
+//     type: GraphQLString,
+//     description: "Created User At",
+//   },
+//   location: {
+//     type: GraphQLList(GraphQLString),
+//     description: "Location of User",
+//   },
+//   video: {
+//     type: GraphQLUpload,
+//     description: "videos location",
+//   },
+// };
 
 const videoType = new GraphQLObjectType({
   name: "Videos",
@@ -58,4 +58,4 @@ const videoType = new GraphQLObjectType({
   fields: () => ({ ...videoSchema }),
 });
 
-module.exports = { videoSchema, videoOptionalSchema, videoType };
+module.exports = { videoSchema, videoType };

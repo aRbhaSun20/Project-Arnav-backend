@@ -38,7 +38,6 @@ conn.once("open", () => {
 const storage = new GridFsStorage({
   url: mongoURI,
   file: (req, file) => {
-    console.log("Inside the file request!", req.query.location);
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {
         if (err) {
@@ -48,7 +47,6 @@ const storage = new GridFsStorage({
         const fileInfo = {
           filename: filename,
           bucketName: "uploads",
-          metadata: { locationName: req.query.location },
         };
         resolve(fileInfo);
       });
@@ -66,6 +64,8 @@ const RootMutationType = require("./graphQl/mutationQuery");
 const RootQueryType = require("./graphQl/rootQuery");
 const { Authentication } = require("./middlewares/Authentication");
 const loginRouter = require("./routes/login");
+const Video = require("./models/Video");
+const Location = require("./models/Location");
 require("dotenv").config();
 
 mongoose
@@ -112,9 +112,41 @@ app.use(express.static("public"));
 //@route POST
 //@desc: Uploads File to DB
 var router = express.Router();
-app.post("/upload", upload.single("file"), (req, res) => {
+app.post("/upload", upload.single("file"), async (req, res) => {
   // Entire logic will come here
-  res.redirect("/");
+  const { file, query } = req;
+  const { start, destination, user_id } = query;
+  const video_id = file.id.valueOf();
+  var destinationLocationData = Location.findOne({
+    placeName: destination,
+  }).then((data) => {
+    console.log(query);
+    console.log(data);
+    return data.id.valueOf();
+  });
+  var startLocationData = Location.findOne({ placeName: start }).then(
+    (data) => {
+      return data.id.valueOf();
+    }
+  );
+
+  console.log(startLocationData, destinationLocationData);
+
+  var videoData = new Video({
+    start: await startLocationData,
+    destination: await destinationLocationData,
+    user_id,
+    video_id,
+  });
+  console.log(videoData);
+  videoData
+    .save()
+    .then((item) => {
+      res.redirect("/");
+    })
+    .catch((err) => {
+      res.status(400).send("unable to save to database");
+    });
 });
 
 // @route GET /
