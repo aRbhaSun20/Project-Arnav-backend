@@ -7,7 +7,7 @@ To execute the project in development mode
 >> npm run development
 >>
 
-To execute the project i production mode
+To execute the project i production mode build
 
 >> npm start
 >>

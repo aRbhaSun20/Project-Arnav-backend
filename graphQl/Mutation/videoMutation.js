@@ -1,21 +1,27 @@
-const { GraphQLBoolean } = require("graphql");
-const { GraphQLUpload } = require("graphql-upload");
+const {
+  videoFileType,
+  videoFileSchema,
+} = require("../Schemas/VideoFIleSchema");
+
+const multer = require("multer");
+const { gfs, storage } = require("../../middlewares/databaseConnection");
+require("dotenv").config();
 
 const videoMutation = {
   uploadVideo: {
     description: "Uploads a video.",
-    type: GraphQLBoolean,
+    type: videoFileType,
     args: {
-      video: {
-        description: "Video file.",
-        type: GraphQLUpload,
-      },
+      ...videoFileSchema,
     },
-    resolve: async (parent, { image }) => {
-      const { filename, mimetype, createReadStream } = await image;
-      const stream = createReadStream();
-      // Promisify the stream and store the file, then…
-      return true;
+    resolve: async (parent, file) => {
+      const upload = multer({ storage }).single("file");
+      console.log(file);
+
+      // const { filename, mimetype, createReadStream } = await image;
+      // const stream = createReadStream();
+      // // Promisify the stream and store the file, then…
+      return file;
     },
   },
 };

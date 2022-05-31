@@ -1,28 +1,24 @@
 const { GraphQLList, GraphQLNonNull, GraphQLString } = require("graphql");
-const Location = require("../../models/Location");
+const { getAllVideoData } = require("../../middlewares/databaseConnection");
 const Video = require("../../models/Video");
-const { videoType } = require("../Schemas/VideoSchema");
+const { videoFileType } = require("../Schemas/VideoFIleSchema");
 
 const videoQuery = {
   video: {
-    type: videoType,
+    type: videoFileType,
     description: "video for location",
     args: {
-      destination: { type: GraphQLNonNull(GraphQLString) },
+      _id: { type: GraphQLNonNull(GraphQLString) },
     },
     resolve: async (parent, args) => {
-      const locationData = await Location.findOne({
-        placeName: args.destination,
-      });
-      const locationID = locationData.id.valueOf();
-      return await Video.findOne({ destination: locationID });
+      return await Video.findOne({ _id: args._id });
     },
   },
   videos: {
-    type: GraphQLList(videoType),
+    type: GraphQLList(videoFileType),
     description: "list of videos for location",
     resolve: async () => {
-      return await Video.find();
+      return await getAllVideoData();
     },
   },
 };

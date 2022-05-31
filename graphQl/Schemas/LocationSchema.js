@@ -6,6 +6,7 @@ const {
   GraphQLList,
 } = require("graphql");
 const { userType } = require("./UserSchema");
+const Users = require("../../models/Users");
 
 const LocationSchema = {
   _id: {
@@ -23,11 +24,18 @@ const LocationSchema = {
     type: GraphQLNonNull(GraphQLString),
     description: "Associated User Created",
   },
+  user: {
+    type: userType,
+    description: "Associated User Created",
+    resolve: (user) => {
+      return Users.findById(user.userId);
+    },
+  },
 };
 
 const locationOptionalSchema = {
   _id: {
-    type: GraphQLNonNull(GraphQLString),
+    type: GraphQLString,
   },
   placeName: {
     type: GraphQLString,

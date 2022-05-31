@@ -59,10 +59,10 @@ const userMutation = {
       password: { type: GraphQLNonNull(GraphQLString) },
     },
     resolve: async (parent, args) => {
-      const user = await Users.findOne({ name: args.user });
+      const user = await Users.findOne({ email: args.user });
 
       if (!user) {
-        throw new Error("No user with that email");
+        throw new Error("No user with email");
       }
       if (args.password === user._doc.password) {
         const token = jwt.sign(

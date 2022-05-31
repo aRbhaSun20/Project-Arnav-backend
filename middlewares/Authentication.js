@@ -17,11 +17,11 @@ const Authentication = (req, res, next) => {
         }
       }
     );
-  } else { 
+  } else {
+    // if (process.env.DEVELOPMENT)
     next();
-    // res.status(401).json({ error: "token missing" });
+    // else res.status(401).json({ error: "token missing" });
   }
 };
 
-
-module.exports = { Authentication, };
+module.exports = { Authentication };

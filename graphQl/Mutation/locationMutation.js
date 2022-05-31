@@ -1,5 +1,4 @@
 const {
-  LocationSchema,
   LocationType,
   locationOptionalSchema,
 } = require("../Schemas/LocationSchema");
@@ -12,7 +11,7 @@ const locationMutation = {
     type: LocationType,
     description: "Add New Location",
     args: {
-      ...LocationSchema,
+      ...locationOptionalSchema,
     },
     resolve: async (parent, args) => {
       const location = new Location({ ...args });

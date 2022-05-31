@@ -1,6 +1,7 @@
 const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
 const Users = require("../../models/Users");
 const { userType } = require("../Schemas/UserSchema");
+const { ObjectId } = require("mongodb");
 
 const userQuery = {
   user: {
@@ -10,7 +11,7 @@ const userQuery = {
       _id: { type: GraphQLNonNull(GraphQLString) },
     },
     resolve: async (parent, args) => {
-      return Users.findOne({ _id: args._id });
+      return await Users.findById(args._id);
     },
   },
   users: {

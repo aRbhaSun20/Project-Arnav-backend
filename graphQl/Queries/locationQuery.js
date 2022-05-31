@@ -9,13 +9,13 @@ const locationQuery = {
     args: {
       _id: { type: GraphQLNonNull(GraphQLString) },
     },
-    resolve: async () => {
+    resolve: async (parent, args) => {
       return Location.findOne({ _id: args._id });
     },
   },
   locations: {
     type: GraphQLList(LocationType),
-    description: "list of locations ",
+    description: "list of locations",
     resolve: async () => {
       return await Location.find();
     },
