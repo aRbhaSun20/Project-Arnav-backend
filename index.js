@@ -16,6 +16,7 @@ const RootMutationType = require("./graphQl/mutationQuery");
 const RootQueryType = require("./graphQl/rootQuery");
 const { Authentication } = require("./middlewares/Authentication");
 const videoRouter = require("./routes/video");
+
 require("dotenv").config();
 
 app.use(bodyParser.json());

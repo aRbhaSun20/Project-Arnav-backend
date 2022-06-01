@@ -6,7 +6,23 @@ const path = require("path");
 const Grid = require("gridfs-stream");
 const { GridFsStorage } = require("multer-gridfs-storage");
 
+const redis = require("redis");
+const client = redis.createClient();
+
 let gfs, gridfsBucket;
+
+const redisConnect = async () => {
+  await client
+    .on("connect", function () {
+      console.log("redis connected");
+      console.log(`connected ${client.connected}`);
+    })
+    .on("error", function (error) {
+      console.log(error);
+    });
+
+  console.log(client.set("framework", "ReactJS"));
+};
 
 mongoose
   .connect(process.env.MONGODBURL, {
@@ -27,6 +43,7 @@ if (connection) {
     });
     gfs = Grid(connection.db, mongoose.mongo);
     gfs.collection("uploads");
+    redisConnect();
   });
 }
 
