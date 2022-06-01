@@ -19,6 +19,7 @@ const locationMutation = {
     },
     resolve: async (parent, args) => {
       const location = new Location({ ...args });
+      console.log(location,args)
       return await location.save();
     },
   },

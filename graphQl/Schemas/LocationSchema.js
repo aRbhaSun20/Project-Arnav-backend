@@ -44,14 +44,16 @@ const LocationSchema = {
   neighborIds: {
     type: GraphQLList(NeighbourType),
     description: "neighbor ids for the node",
-    resolve:(location) => {
-      console.log(location)
-      
-    }
   },
   neighbors: {
     type: new GraphQLList(NodeType),
     description: "neighbors for the node",
+    resolve: async (location) => {
+      const data = await location.neighborIds.map((neigh) =>
+        Node.findById(neigh.destinationId)
+      );
+      return data;
+    },
   },
   parentId: {
     type: GraphQLString,

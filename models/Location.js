@@ -1,3 +1,4 @@
+const { DateTime } = require("luxon");
 const mongoose = require("mongoose");
 
 const DIRECTION_ENUMS = ["FRONT", "RIGHT", "LEFT"];
@@ -15,7 +16,7 @@ const LocationSchema = new mongoose.Schema({
     ref: "Node",
   },
 
-  neightbors: {
+  neighborIds: {
     type: [
       {
         destinationId: {
@@ -38,6 +39,10 @@ const LocationSchema = new mongoose.Schema({
     type: String,
     required: true,
     ref: "Parent",
+  },
+  createdAt: {
+    type: Date,
+    default: () => DateTime.now().toString(),
   },
 });
 

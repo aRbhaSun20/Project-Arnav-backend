@@ -1,3 +1,4 @@
+const { DateTime } = require("luxon");
 const mongoose = require("mongoose");
 
 const NodeSchema = new mongoose.Schema({
@@ -12,6 +13,10 @@ const NodeSchema = new mongoose.Schema({
   coordinates: {
     type: [Number],
     required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: () => DateTime.now().toString(),
   },
   userId: { type: String, required: true, ref: "User" },
   // parentId: {

@@ -1,3 +1,4 @@
+const { DateTime } = require("luxon");
 const mongoose = require("mongoose");
 
 const ParentSchema = new mongoose.Schema({
@@ -8,6 +9,10 @@ const ParentSchema = new mongoose.Schema({
   parentImageUrl: {
     type: String,
     default: "",
+  },
+  createdAt: {
+    type: Date,
+    default: () => DateTime.now().toString(),
   },
   userId: { type: String, required: true, ref: "User" },
 });

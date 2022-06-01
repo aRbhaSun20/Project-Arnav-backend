@@ -13,6 +13,17 @@ const locationQuery = {
       return Location.findOne({ _id: args._id });
     },
   },
+  getParentLocations: {
+    type: GraphQLList(LocationType),
+    description: "list of locations",
+    args: {
+      parentId: { type: GraphQLNonNull(GraphQLString) },
+      sourceId: { type: GraphQLString },
+    },
+    resolve: async (parent, args) => {
+      return await Location.find({ parentId: args.parentId });
+    },
+  },
   locations: {
     type: GraphQLList(LocationType),
     description: "list of locations",
