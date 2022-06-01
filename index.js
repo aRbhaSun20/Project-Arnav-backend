@@ -62,7 +62,6 @@ app.use(express.static("public"));
 //   res.redirect("/");
 // });
 
-
 // @route GET /files
 // @desc  Display all files in JSON
 // app.get("/files", (req, res) => {
