@@ -1,6 +1,8 @@
 const { GraphQLObjectType } = require("graphql");
 const { locationMutation } = require("./Mutation/locationMutation");
 const { messageMutation } = require("./Mutation/messageMutation");
+const { nodesMutation } = require("./Mutation/nodesMutation");
+const { parentMutation } = require("./Mutation/parentMutation");
 
 const { userMutation } = require("./Mutation/userMutation");
 const { videoMutation } = require("./Mutation/videoMutation");
@@ -13,7 +15,9 @@ const RootMutationType = new GraphQLObjectType({
     ...userMutation,
     ...locationMutation,
     ...videoMutation,
-    ...messageMutation
+    ...messageMutation,
+    ...nodesMutation,
+    ...parentMutation
   }),
 });
 

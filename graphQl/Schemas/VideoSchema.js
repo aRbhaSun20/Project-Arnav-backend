@@ -2,11 +2,13 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLList,
-  GraphQLInt,
   GraphQLNonNull,
   GraphQLFloat,
 } = require("graphql");
-const { GraphQLUpload } = require("graphql-upload");
+const { userType } = require("./UserSchema");
+const Users = require("../../models/Users");
+const Location = require("../../models/Location");
+const { LocationType } = require("./LocationSchema");
 
 const videoSchema = {
   _id: {
@@ -20,13 +22,43 @@ const videoSchema = {
     type: GraphQLString,
     description: "Created User At",
   },
-  location: {
-    type: GraphQLNonNull(GraphQLList(GraphQLString)),
-    description: "Location of User",
+  sourceId: {
+    type: GraphQLString,
+    description: "video Location source id",
   },
-  video: {
-    type: GraphQLNonNull(GraphQLUpload),
-    description: "videos location",
+  source: {
+    type: LocationType,
+    description: "video Location source",
+    resolve: (location) => {
+      return Location.findById(location.sourceId);
+    },
+  },
+  destinationId: {
+    type: GraphQLString,
+    description: "video Location destination id",
+  },
+  destination: {
+    type: LocationType,
+    description: "video Location destination",
+    resolve: (location) => {
+      return Location.findById(location.destinationId);
+    },
+  },
+  userId: {
+    type: GraphQLNonNull(GraphQLString),
+    description: "Associated User id Created",
+  },
+  user: {
+    type: userType,
+    description: "Associated User Created",
+    resolve: (user) => {
+      return Users.findById(user.userId);
+    },
+  },
+
+  videoUrl: {
+    type: GraphQLNonNull(GraphQLString),
+    description: "videos url",
   },
 };
 
@@ -42,13 +74,30 @@ const videoOptionalSchema = {
     type: GraphQLString,
     description: "Created User At",
   },
-  location: {
-    type: GraphQLList(GraphQLString),
-    description: "Location of User",
+  source: {
+    type: LocationType,
+    description: "video Location source",
+    resolve: (location) => {
+      return Location.findById(user.userId);
+    },
   },
-  video: {
-    type: GraphQLUpload,
-    description: "videos location",
+  destination: {
+    type: LocationType,
+    description: "video Location destination",
+    resolve: (location) => {
+      return Location.findById(user.userId);
+    },
+  },
+  user: {
+    type: userType,
+    description: "Associated User Created",
+    resolve: (user) => {
+      return Users.findById(user.userId);
+    },
+  },
+  videoUrl: {
+    type: GraphQLNonNull(GraphQLString),
+    description: "videos url",
   },
 };
 

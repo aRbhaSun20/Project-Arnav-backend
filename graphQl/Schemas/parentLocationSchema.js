@@ -2,32 +2,9 @@ const {
   GraphQLObjectType,
   GraphQLString,
   GraphQLNonNull,
-  GraphQLFloat,
-  GraphQLList,
 } = require("graphql");
 const { userType } = require("./UserSchema");
-
-const parentLocationSchema = {
-  _pid: {
-    type: GraphQLNonNull(GraphQLString),
-  },
-  parentName: {
-    type: GraphQLNonNull(GraphQLString),
-    description: "Name of parent location",
-  },
-  coordinates: {
-    type: GraphQLNonNull(GraphQLList(GraphQLFloat)),
-    description: "Coordinates of location",
-  },
-  image: {
-    type: GraphQLString,
-    description: "image of parent location",
-  },
-  childLocations: {
-    type: GraphQLNonNull(GraphQLList(GraphQLFloat)),
-    description: "All child nodes in a parent location",
-  },
-};
+const Users = require("../../models/Users");
 
 const parentLocationType = new GraphQLObjectType({
   name: "parentLocation",
@@ -35,4 +12,51 @@ const parentLocationType = new GraphQLObjectType({
   fields: () => ({ ...parentLocationSchema }),
 });
 
-module.exports = { parentLocationType, parentLocationSchema };
+const parentLocationSchema = {
+  _id: {
+    type: GraphQLString,
+  },
+  parentName: {
+    type: GraphQLNonNull(GraphQLString),
+    description: "Name of place",
+  },
+  parentUserId: {
+    type: GraphQLNonNull(GraphQLString),
+    description: "Associated User Created",
+  },
+  parentUser: {
+    type: userType,
+    description: "Associated User Created",
+    resolve: (user) => {
+      return Users.findById(user.userId);
+    },
+  },
+  parentImageUrl: {
+    type: GraphQLString,
+    description: "image of parent location",
+  },
+};
+
+const parentOptionalSchema = {
+  _id: {
+    type: GraphQLString,
+  },
+  parentName: {
+    type: GraphQLString,
+    description: "Name of place",
+  },
+  userId: {
+    type: GraphQLString,
+    description: "Associated User Created",
+  },
+  imageUrl: {
+    type: GraphQLString,
+    description: "image of parent location",
+  },
+};
+
+module.exports = {
+  parentLocationType,
+  parentLocationSchema,
+  parentOptionalSchema,
+};

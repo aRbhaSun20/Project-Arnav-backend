@@ -15,13 +15,7 @@ const videoMutation = {
       ...videoFileSchema,
     },
     resolve: async (parent, file) => {
-      const upload = multer({ storage }).single("file");
-      console.log(file);
 
-      // const { filename, mimetype, createReadStream } = await image;
-      // const stream = createReadStream();
-      // // Promisify the stream and store the file, then…
-      return file;
     },
   },
 };
