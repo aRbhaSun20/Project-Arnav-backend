@@ -1,6 +1,6 @@
 const {
   LocationType,
-  LocationInputType,
+  locationOptionalSchema,
 } = require("../Schemas/LocationSchema");
 const Location = require("../../models/Location");
 const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
@@ -15,7 +15,7 @@ const locationMutation = {
     type: LocationType,
     description: "Add New Location",
     args: {
-      ...LocationInputType,
+      ...locationOptionalSchema,
     },
     resolve: async (parent, args) => {
       const location = new Location({ ...args });
@@ -26,7 +26,7 @@ const locationMutation = {
     type: LocationType,
     description: "Edit Location",
     args: {
-      ...LocationInputType,
+      ...locationOptionalSchema,
     },
     resolve: async (parent, args) => {
       const { _id, ...remaining } = args;

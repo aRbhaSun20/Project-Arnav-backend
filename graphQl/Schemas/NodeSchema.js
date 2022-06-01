@@ -16,11 +16,11 @@ const NodeSchema = {
     type: GraphQLString,
   },
   placeName: {
-    type: GraphQLNonNull(GraphQLString),
+    type: GraphQLString,
     description: "Name of place",
   },
   coordinates: {
-    type: GraphQLNonNull(GraphQLList(GraphQLFloat)),
+    type: GraphQLList(GraphQLFloat),
     description: "Coordinates of location",
   },
   userId: {

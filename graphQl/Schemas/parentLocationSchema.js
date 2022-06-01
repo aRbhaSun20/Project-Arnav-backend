@@ -20,7 +20,7 @@ const parentLocationSchema = {
     type: GraphQLNonNull(GraphQLString),
     description: "Name of place",
   },
-  parentUserId: {
+  userId: {
     type: GraphQLNonNull(GraphQLString),
     description: "Associated User Created",
   },
@@ -49,7 +49,7 @@ const parentOptionalSchema = {
     type: GraphQLString,
     description: "Associated User Created",
   },
-  imageUrl: {
+  parentImageUrl: {
     type: GraphQLString,
     description: "image of parent location",
   },

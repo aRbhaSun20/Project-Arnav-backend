@@ -1,5 +1,5 @@
 const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
-const Location = require("../../models/Location");
+const Node = require("../../models/Node");
 const { NodeType } = require("../Schemas/NodeSchema");
 
 const nodesQuery = {
@@ -10,14 +10,14 @@ const nodesQuery = {
       _id: { type: GraphQLNonNull(GraphQLString) },
     },
     resolve: async (parent, args) => {
-      return Location.findById(args._id);
+      return Node.findById(args._id);
     },
   },
   nodes: {
-    type: NodeType,
+    type: new GraphQLList(NodeType),
     description: "list of nodes",
     resolve: async (parent, args) => {
-      return Location.find();
+      return await Node.find();
     },
   },
 };

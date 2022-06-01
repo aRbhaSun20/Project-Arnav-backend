@@ -44,6 +44,10 @@ const LocationSchema = {
   neighborIds: {
     type: GraphQLList(NeighbourType),
     description: "neighbor ids for the node",
+    resolve:(location) => {
+      console.log(location)
+      
+    }
   },
   neighbors: {
     type: new GraphQLList(NodeType),
@@ -52,12 +56,13 @@ const LocationSchema = {
   parentId: {
     type: GraphQLString,
     description: "parent id for the node",
-  },  parent: {
+  },
+  parent: {
     type: parentLocationType,
     description: "parent for the node",
     resolve: (location) => {
-      return Parent.findById(location.parentId)
-    } 
+      return Parent.findById(location.parentId);
+    },
   },
 };
 
@@ -73,10 +78,6 @@ const locationOptionalSchema = {
     type: GraphQLString,
     description: "Location source id",
   },
-  destinationId: {
-    type: GraphQLString,
-    description: "Location destination id",
-  },
   neighborIds: {
     type: new GraphQLList(NeighbourInputType),
     description: "neighbor ids for the node",
@@ -84,6 +85,9 @@ const locationOptionalSchema = {
   parentId: {
     type: GraphQLString,
     description: "parent id for the node",
+  },
+  videoUrl: {
+    type: GraphQLString,
   },
 };
 

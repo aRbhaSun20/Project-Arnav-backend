@@ -12,6 +12,7 @@ const LocationSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: 0,
+    ref: "Node",
   },
 
   neightbors: {
@@ -21,6 +22,7 @@ const LocationSchema = new mongoose.Schema({
           type: String,
           required: true,
           default: 0,
+          ref: "Node",
         },
         direction: {
           type: String,
