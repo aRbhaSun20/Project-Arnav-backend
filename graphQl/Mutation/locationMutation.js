@@ -1,10 +1,13 @@
 const {
-  LocationSchema,
   LocationType,
   locationOptionalSchema,
 } = require("../Schemas/LocationSchema");
 const Location = require("../../models/Location");
-const { GraphQLNonNull, GraphQLString } = require("graphql");
+const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
+const {
+  NeighbourType,
+  NeighbourInputType,
+} = require("../Schemas/NeighbourSchema");
 require("dotenv").config();
 
 const locationMutation = {
@@ -12,7 +15,7 @@ const locationMutation = {
     type: LocationType,
     description: "Add New Location",
     args: {
-      ...LocationSchema,
+      ...locationOptionalSchema,
     },
     resolve: async (parent, args) => {
       const location = new Location({ ...args });

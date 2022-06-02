@@ -1,4 +1,5 @@
 const { GraphQLList, GraphQLNonNull, GraphQLString } = require("graphql");
+const { getAllVideoData } = require("../../middlewares/databaseConnection");
 const Video = require("../../models/Video");
 const { videoType } = require("../Schemas/VideoSchema");
 
@@ -17,7 +18,7 @@ const videoQuery = {
     type: GraphQLList(videoType),
     description: "list of videos for location",
     resolve: async () => {
-      return await Video.find();
+      return await getAllVideoData();
     },
   },
 };

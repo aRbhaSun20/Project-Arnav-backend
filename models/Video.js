@@ -1,24 +1,35 @@
+const { DateTime } = require("luxon");
 const mongoose = require("mongoose");
 
 const VideoSchema = new mongoose.Schema({
-  start: {
-    type: String,
-    required: true,
-  },
-  destination: {
+  name: {
     type: String,
     required: true,
   },
 
-  user_id: {
+  videoUrl: {
+    type: String,
+    required: true,
+  },
+
+  userId: {
     type: String,
     ref: "User",
     required: true,
   },
-  video: {
-    type: Buffer,
-    contentType: String,
+  sourceId: {
+    type: String,
+    ref: "Location",
     required: true,
+  },
+  destinationId: {
+    type: String,
+    ref: "Location",
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: () => DateTime.now().toString(),
   },
 });
 
