@@ -10,7 +10,6 @@ const { GridFsStorage } = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
 const methodOverride = require("method-override");
 const app = express();
-
 //middleware -Video upload
 
 app.use(bodyParser.json());
