@@ -5,54 +5,6 @@ const crypto = require("crypto");
 
 const methodOverride = require("method-override");
 const app = express();
-<<<<<<< HEAD
-//middleware -Video upload
-
-app.use(bodyParser.json());
-app.use(methodOverride("_method"));
-
-const mongoose = require("mongoose");
-
-//mongo URI
-const mongoURI =
-  "mongodb+srv://arbhasun:aBIX7Ekbr7Uif5wq@cluster0.w2if5.mongodb.net/ArNav?retryWrites=true&w=majority";
-
-// mongo connection
-const conn = mongoose.createConnection(mongoURI);
-
-//gfs stream
-let gfs;
-
-conn.once("open", () => {
-  //init stream
-  gfs = Grid(conn.db, mongoose.mongo);
-  gfs.collection("uploads");
-});
-
-//storage engine
-const storage = new GridFsStorage({
-  url: mongoURI,
-  file: (req, file) => {
-    console.log("Inside the file request!", req.query.location);
-    return new Promise((resolve, reject) => {
-      crypto.randomBytes(16, (err, buf) => {
-        if (err) {
-          return reject(err);
-        }
-        const filename = buf.toString("hex") + path.extname(file.originalname);
-        const fileInfo = {
-          filename: filename,
-          bucketName: "uploads",
-          metadata: { locationName: req.query.location },
-        };
-        resolve(fileInfo);
-      });
-    });
-  },
-});
-const upload = multer({ storage });
-=======
->>>>>>> 6d89a35df09499030f3e295266ddfa9009224aa4
 
 const { graphqlHTTP } = require("express-graphql");
 const { GraphQLSchema } = require("graphql");
