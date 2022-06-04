@@ -38,6 +38,10 @@ const NodeSchema = {
     type: GraphQLString,
     description: "image of parent location",
   },
+  fileName: {
+    type: GraphQLString,
+    description: "File Name",
+  },
   // parentId: {
   //   type: GraphQLString,
   //   description: "parent id for the node",
@@ -70,6 +74,10 @@ const nodeOptionalSchema = {
   imageUrl: {
     type: GraphQLString,
     description: "image of parent location",
+  },
+  fileName: {
+    type: GraphQLString,
+    description: "File Name",
   },
   // parentId: {
   //   type: GraphQLString,

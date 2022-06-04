@@ -66,6 +66,10 @@ const LocationSchema = {
       return Parent.findById(location.parentId);
     },
   },
+  fileName: {
+    type: GraphQLString,
+    description: "File Name",
+  },
 };
 
 const locationOptionalSchema = {
@@ -90,6 +94,10 @@ const locationOptionalSchema = {
   },
   videoUrl: {
     type: GraphQLString,
+  },
+  fileName: {
+    type: GraphQLString,
+    description: "File Name",
   },
 };
 

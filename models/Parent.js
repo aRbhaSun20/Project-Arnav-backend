@@ -9,6 +9,9 @@ const ParentSchema = new mongoose.Schema({
   parentImageUrl: {
     type: String,
     default: "",
+  },  fileName: {
+    type: String,
+    default: "",
   },
   createdAt: {
     type: Date,

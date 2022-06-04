@@ -15,7 +15,10 @@ const LocationSchema = new mongoose.Schema({
     default: 0,
     ref: "Node",
   },
-
+  fileName: {
+    type: String,
+    default: "",
+  },
   neighborIds: {
     type: [
       {

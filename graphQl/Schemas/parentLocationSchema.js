@@ -1,8 +1,4 @@
-const {
-  GraphQLObjectType,
-  GraphQLString,
-  GraphQLNonNull,
-} = require("graphql");
+const { GraphQLObjectType, GraphQLString, GraphQLNonNull } = require("graphql");
 const { userType } = require("./UserSchema");
 const Users = require("../../models/Users");
 
@@ -35,6 +31,10 @@ const parentLocationSchema = {
     type: GraphQLString,
     description: "image of parent location",
   },
+  fileName: {
+    type: GraphQLString,
+    description: "File Name",
+  },
 };
 
 const parentOptionalSchema = {
@@ -52,6 +52,10 @@ const parentOptionalSchema = {
   parentImageUrl: {
     type: GraphQLString,
     description: "image of parent location",
+  },
+  fileName: {
+    type: GraphQLString,
+    description: "File Name",
   },
 };
 

@@ -10,6 +10,10 @@ const NodeSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  fileName: {
+    type: String,
+    default: "",
+  },
   coordinates: {
     type: [Number],
     required: true,
