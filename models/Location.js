@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const DIRECTION_ENUMS = ["FRONT", "RIGHT", "LEFT"];
 
 const LocationSchema = new mongoose.Schema({
-  videoUrl: {
+  imageUrl: {
     type: String,
     default: "",
   },
@@ -33,6 +33,10 @@ const LocationSchema = new mongoose.Schema({
           required: true,
           enum: DIRECTION_ENUMS,
           default: "FRONT",
+        },
+        videoUrl: {
+          type: String,
+          default: "",
         },
       },
     ],

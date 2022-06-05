@@ -30,18 +30,26 @@ const NeighbourSchema = {
     type: GraphQLString,
     description: "Location destination id",
   },
+  videoUrl: {
+    type: GraphQLString,
+    description: "Location destination id",
+  },
 };
 
 const NeighbourInputType = new GraphQLInputObjectType({
   name: "neighbourInputs",
-  fields: () => ({ 
+  fields: () => ({
     direction: {
       type: DirectionEnums,
     },
     destinationId: {
       type: GraphQLString,
     },
-   }),
+    videoUrl: {
+      type: GraphQLString,
+      description: "Location destination id",
+    },
+  }),
 });
 
 const NeighbourType = new GraphQLObjectType({

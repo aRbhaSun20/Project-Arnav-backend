@@ -16,7 +16,7 @@ const LocationSchema = {
   _id: {
     type: GraphQLString,
   },
-  videoUrl: {
+  imageUrl: {
     type: GraphQLString,
   },
   userId: {
@@ -92,7 +92,7 @@ const locationOptionalSchema = {
     type: GraphQLString,
     description: "parent id for the node",
   },
-  videoUrl: {
+  imageUrl: {
     type: GraphQLString,
   },
   fileName: {
