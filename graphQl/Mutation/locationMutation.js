@@ -18,8 +18,22 @@ const locationMutation = {
       ...locationOptionalSchema,
     },
     resolve: async (parent, args) => {
-      const location = new Location({ ...args });
-      console.log(location,args)
+      const { neighborData, ...remaining } = args;
+      const requiredNeighborData = JSON.parse(neighborData);
+      const neighborObj = Object.keys(requiredNeighborData);
+      const resultantArr = neighborObj.map((neighKey) => {
+        const { direction, videoUrl } = requiredNeighborData[neighKey];
+        return {
+          destinationId: neighKey,
+          direction,
+          videoUrl,
+        };
+      });
+      const location = new Location({
+        ...remaining,
+        neighborIds: resultantArr,
+      });
+      console.log(resultantArr, remaining);
       return await location.save();
     },
   },

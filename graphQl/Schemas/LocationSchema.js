@@ -88,6 +88,10 @@ const locationOptionalSchema = {
     type: new GraphQLList(NeighbourInputType),
     description: "neighbor ids for the node",
   },
+  neighborData: {
+    type: GraphQLString,
+    description: "neighbor ids data",
+  },
   parentId: {
     type: GraphQLString,
     description: "parent id for the node",
