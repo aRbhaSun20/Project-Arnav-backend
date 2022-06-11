@@ -19,7 +19,7 @@ const userMutation = {
     },
     resolve: async (parent, args) => {
       const user = await new Users({ ...args }).save();
-      cacheManagement.set(args.email, user);
+      cacheManagement.set(args.email, JSON.stringify(user));
       if (user) {
         const token = jwt.sign(
           { _id: user._id, email: user.email, password: user.password },

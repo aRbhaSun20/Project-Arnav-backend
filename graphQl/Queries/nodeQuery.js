@@ -1,5 +1,5 @@
 const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
-const { cacheManagement } = require("../../middlewares/CacheModule");
+const { cacheManagement, setKey } = require("../../middlewares/CacheModule");
 const Node = require("../../models/Node");
 const { NodeType } = require("../Schemas/NodeSchema");
 
@@ -25,10 +25,12 @@ const nodesQuery = {
     type: new GraphQLList(NodeType),
     description: "list of nodes",
     resolve: async (parent, args) => {
+      if (cacheManagement.has("nodeAll")) {
+        const data = cacheManagement.get("nodeAll");
+        if (data) return JSON.parse(data);
+      }
       const datas = await Node.find();
-      datas.forEach((ele) => {
-        cacheManagement.set(ele._id, ele);
-      });
+      saveMultiple(datas, "nodeAll");
       return datas;
     },
   },

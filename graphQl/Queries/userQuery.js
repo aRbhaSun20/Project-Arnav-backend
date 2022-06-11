@@ -2,7 +2,7 @@ const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
 const Users = require("../../models/Users");
 const { userType } = require("../Schemas/UserSchema");
 const { ObjectId } = require("mongodb");
-const { cacheManagement } = require("../../middlewares/CacheModule");
+const { cacheManagement, setKey } = require("../../middlewares/CacheModule");
 
 const userQuery = {
   user: {
@@ -27,7 +27,7 @@ const userQuery = {
     resolve: async () => {
       const datas = await Users.find();
       datas.forEach((ele) => {
-        cacheManagement.set(args._id, ele);
+        cacheManagement.set(setKey(ele._id), ele);
       });
     },
   },

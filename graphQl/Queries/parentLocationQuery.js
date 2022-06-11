@@ -1,5 +1,9 @@
 const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
-const { cacheManagement } = require("../../middlewares/CacheModule");
+const {
+  cacheManagement,
+  setKey,
+  saveMultiple,
+} = require("../../middlewares/CacheModule");
 const Location = require("../../models/Location");
 const Parent = require("../../models/Parent");
 const { LocationType } = require("../Schemas/LocationSchema");
@@ -26,10 +30,13 @@ const parentLocationQuery = {
     type: GraphQLList(parentLocationType),
     description: "list of parent locations",
     resolve: async () => {
+      if (cacheManagement.has("parentAll")) {
+        const data = cacheManagement.get("parentAll");
+        if (data) return JSON.parse(data);
+      }
       const datas = await Parent.find();
-      datas.forEach((ele) => {
-        cacheManagement.set(ele._id, ele);
-      });
+      saveMultiple(datas, "parentAll");
+      return datas;
     },
   },
 };

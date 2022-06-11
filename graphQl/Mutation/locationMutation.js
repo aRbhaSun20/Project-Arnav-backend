@@ -4,7 +4,7 @@ const {
 } = require("../Schemas/LocationSchema");
 const Location = require("../../models/Location");
 const { GraphQLNonNull, GraphQLString } = require("graphql");
-const { cacheManagement } = require("../../middlewares/CacheModule");
+const { cacheManagement, setKey } = require("../../middlewares/CacheModule");
 require("dotenv").config();
 
 const locationMutation = {
@@ -30,8 +30,10 @@ const locationMutation = {
         ...remaining,
         neighborIds: resultantArr,
       }).save();
+      if (cacheManagement.has("locationAll"))
+        cacheManagement.del("locationAll");
       console.log(resultantArr, remaining);
-      cacheManagement.set(location._id, location);
+      cacheManagement.set(setKey(location._id), location);
       return location;
     },
   },
@@ -48,7 +50,9 @@ const locationMutation = {
         { $set: { ...remaining } },
         { new: true }
       );
-      cacheManagement.set(data._id, data);
+      if (cacheManagement.has("locationAll"))
+        cacheManagement.del("locationAll");
+      cacheManagement.set(setKey(data._id), data);
       return data;
     },
   },
@@ -62,6 +66,8 @@ const locationMutation = {
     },
     resolve: async (parent, args) => {
       if (cacheManagement.has(args._id)) cacheManagement.del(args._id);
+      if (cacheManagement.has("locationAll"))
+        cacheManagement.del("locationAll");
       return await Location.findOneAndRemove({ _id: args._id });
     },
   },

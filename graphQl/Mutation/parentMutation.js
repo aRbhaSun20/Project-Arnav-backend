@@ -4,7 +4,7 @@ const {
   parentOptionalSchema,
 } = require("../Schemas/parentLocationSchema");
 const Parent = require("../../models/Parent");
-const { cacheManagement } = require("../../middlewares/CacheModule");
+const { cacheManagement, setKey } = require("../../middlewares/CacheModule");
 require("dotenv").config();
 
 const parentMutation = {
@@ -16,7 +16,8 @@ const parentMutation = {
     },
     resolve: async (parent, args) => {
       const parentLoc = await new Parent({ ...args }).save();
-      cacheManagement.set(parentLoc._id, parentLoc);
+      if (cacheManagement.has("parentAll")) cacheManagement.del("parentAll");
+      cacheManagement.set(setKey(parentLoc._id), parentLoc);
       return parentLoc;
     },
   },
@@ -33,7 +34,8 @@ const parentMutation = {
         { $set: { ...remaining } },
         { new: true }
       );
-      cacheManagement.set(data._id, data);
+      if (cacheManagement.has("parentAll")) cacheManagement.del("parentAll");
+      cacheManagement.set(setKey(data._id), data);
       return data;
     },
   },
@@ -47,6 +49,7 @@ const parentMutation = {
     },
     resolve: async (parent, args) => {
       if (cacheManagement.has(args._id)) cacheManagement.del(args._id);
+      if (cacheManagement.has("parentAll")) cacheManagement.del("parentAll");
       return await Parent.findOneAndRemove({ _id: args._id });
     },
   },
