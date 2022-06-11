@@ -1,7 +1,6 @@
 const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
 const {
   cacheManagement,
-  setKey,
   saveMultiple,
 } = require("../../middlewares/CacheModule");
 const Location = require("../../models/Location");

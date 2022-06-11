@@ -1,7 +1,6 @@
 const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
 const {
   cacheManagement,
-  setKey,
   saveMultiple,
 } = require("../../middlewares/CacheModule");
 const Location = require("../../models/Location");
@@ -31,7 +30,7 @@ const locationQuery = {
     resolve: async () => {
       if (cacheManagement.has("locationAll")) {
         const data = cacheManagement.get("locationAll");
-        console.log("cache from")
+        console.log("cache from");
         if (data) return JSON.parse(data);
       }
       const datas = await Location.find();

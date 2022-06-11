@@ -1,5 +1,8 @@
 const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
-const { cacheManagement, setKey } = require("../../middlewares/CacheModule");
+const {
+  cacheManagement,
+  saveMultiple,
+} = require("../../middlewares/CacheModule");
 const Node = require("../../models/Node");
 const { NodeType } = require("../Schemas/NodeSchema");
 
