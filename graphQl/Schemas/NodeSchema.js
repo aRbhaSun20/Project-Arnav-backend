@@ -7,9 +7,9 @@ const {
 } = require("graphql");
 const { userType } = require("./UserSchema");
 const Users = require("../../models/Users");
-const Location = require("../../models/Location");
 const { parentLocationType } = require("./parentLocationSchema");
 const Parent = require("../../models/Parent");
+const { cacheManagement } = require("../../middlewares/CacheModule");
 
 const NodeSchema = {
   _id: {
@@ -30,8 +30,14 @@ const NodeSchema = {
   user: {
     type: userType,
     description: "Associated User Created",
-    resolve: (user) => {
-      return Users.findById(user.userId);
+    resolve: async (user) => {
+      if (cacheManagement.has(user.userId)) {
+        return cacheManagement.get(user.userId);
+      } else {
+        const data = await Users.findById(user.userId);
+        cacheManagement.set(user.userId, data);
+        return data;
+      }
     },
   },
   imageUrl: {
@@ -42,17 +48,23 @@ const NodeSchema = {
     type: GraphQLString,
     description: "File Name",
   },
-  // parentId: {
-  //   type: GraphQLString,
-  //   description: "parent id for the node",
-  // },
-  // parent: {
-  //   type: parentLocationType,
-  //   description: "Parent Node",
-  //   resolve: (location) => {
-  //     return Parent.findById(location.parentId);
-  //   },
-  // },
+  parentId: {
+    type: GraphQLString,
+    description: "parent id for the node",
+  },
+  parent: {
+    type: parentLocationType,
+    description: "Parent Node",
+    resolve: async (location) => {
+      if (cacheManagement.has(location.parentId)) {
+        return cacheManagement.get(location.parentId);
+      } else {
+        const data = await Parent.findById(location.parentId);
+        cacheManagement.set(location.parentId, data);
+        return data;
+      }
+    },
+  },
 };
 
 const nodeOptionalSchema = {
@@ -79,10 +91,6 @@ const nodeOptionalSchema = {
     type: GraphQLString,
     description: "File Name",
   },
-  // parentId: {
-  //   type: GraphQLString,
-  //   description: "parent id for the node",
-  // },
 };
 
 const NodeType = new GraphQLObjectType({

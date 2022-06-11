@@ -23,11 +23,11 @@ const NodeSchema = new mongoose.Schema({
     default: () => DateTime.now().toString(),
   },
   userId: { type: String, required: true, ref: "User" },
-  // parentId: {
-  //   type: String,
-  //   required: true,
-  //   ref: "Parent",
-  // },
+  parentId: {
+    type: String,
+    required: true,
+    ref: "Parent",
+  },
 });
 
 module.exports = new mongoose.model("Node", NodeSchema);

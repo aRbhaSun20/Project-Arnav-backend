@@ -1,6 +1,7 @@
 const Nodes = require("../../models/Node");
 const { GraphQLNonNull, GraphQLString } = require("graphql");
-const { NodeType, NodeSchema, nodeOptionalSchema } = require("../Schemas/NodeSchema");
+const { NodeType, nodeOptionalSchema } = require("../Schemas/NodeSchema");
+const { cacheManagement } = require("../../middlewares/CacheModule");
 require("dotenv").config();
 
 const nodesMutation = {
@@ -11,8 +12,9 @@ const nodesMutation = {
       ...nodeOptionalSchema,
     },
     resolve: async (parent, args) => {
-      const node = new Nodes({ ...args });
-      return await node.save();
+      const node = await new Nodes({ ...args }).save();
+      cacheManagement.set(node._id, node);
+      return node;
     },
   },
   editNodes: {
@@ -23,11 +25,13 @@ const nodesMutation = {
     },
     resolve: async (parent, args) => {
       const { _id, ...remaining } = args;
-      return await Nodes.findOneAndUpdate(
+      const data = await Nodes.findOneAndUpdate(
         { _id },
         { $set: { ...remaining } },
         { new: true }
       );
+      cacheManagement.set(data._id, data);
+      return data;
     },
   },
   deleteNodes: {
@@ -39,6 +43,8 @@ const nodesMutation = {
       },
     },
     resolve: async (parent, args) => {
+      if (cacheManagement.has(args.args._id))
+        cacheManagement.del(args.args._id);
       return await Nodes.findOneAndRemove({ _id: args._id });
     },
   },

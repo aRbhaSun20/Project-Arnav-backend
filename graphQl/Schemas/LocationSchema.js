@@ -11,6 +11,7 @@ const Node = require("../../models/Node");
 const { NeighbourType, NeighbourInputType } = require("./NeighbourSchema");
 const Parent = require("../../models/Parent");
 const { parentLocationType } = require("./parentLocationSchema");
+const { cacheManagement } = require("../../middlewares/CacheModule");
 
 const LocationSchema = {
   _id: {
@@ -26,8 +27,14 @@ const LocationSchema = {
   user: {
     type: new GraphQLNonNull(userType),
     description: "Associated User Created",
-    resolve: (user) => {
-      return Users.findById(user.userId);
+    resolve: async (user) => {
+      if (cacheManagement.has(user.userId)) {
+        return cacheManagement.get(user.userId);
+      } else {
+        const data = await Users.findById(user.userId);
+        cacheManagement.set(user.userId, data);
+        return data;
+      }
     },
   },
   sourceId: {
@@ -37,8 +44,14 @@ const LocationSchema = {
   source: {
     type: new GraphQLNonNull(NodeType),
     description: "Location source",
-    resolve: (location) => {
-      return Node.findById(location.sourceId);
+    resolve: async (location) => {
+      if (cacheManagement.has(location.sourceId)) {
+        return cacheManagement.get(location.sourceId);
+      } else {
+        const data = await Node.findById(location.sourceId);
+        cacheManagement.set(location.sourceId, data);
+        return data;
+      }
     },
   },
   neighborIds: {
@@ -49,9 +62,15 @@ const LocationSchema = {
     type: new GraphQLList(NodeType),
     description: "neighbors for the node",
     resolve: async (location) => {
-      const data = await location.neighborIds.map((neigh) =>
-        Node.findById(neigh.destinationId)
-      );
+      const data = await location.neighborIds.map(async (neigh) => {
+        if (cacheManagement.has(neigh.destinationId)) {
+          return cacheManagement.get(neigh.destinationId);
+        } else {
+          const data = await Node.findById(neigh.destinationId);
+          cacheManagement.set(neigh.destinationId, data);
+          return data;
+        }
+      });
       return data;
     },
   },
@@ -62,8 +81,14 @@ const LocationSchema = {
   parent: {
     type: parentLocationType,
     description: "parent for the node",
-    resolve: (location) => {
-      return Parent.findById(location.parentId);
+    resolve: async (location) => {
+      if (cacheManagement.has(location.parentId)) {
+        return cacheManagement.get(location.parentId);
+      } else {
+        const data = await Parent.findById(location.parentId);
+        cacheManagement.set(location.parentId, data);
+        return data;
+      }
     },
   },
   fileName: {

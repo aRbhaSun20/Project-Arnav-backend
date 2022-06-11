@@ -1,6 +1,7 @@
 const { GraphQLObjectType, GraphQLString, GraphQLNonNull } = require("graphql");
 const { userType } = require("./UserSchema");
 const Users = require("../../models/Users");
+const { cacheManagement } = require("../../middlewares/CacheModule");
 
 const parentLocationType = new GraphQLObjectType({
   name: "parentLocation",
@@ -23,8 +24,14 @@ const parentLocationSchema = {
   parentUser: {
     type: userType,
     description: "Associated User Created",
-    resolve: (user) => {
-      return Users.findById(user.userId);
+    resolve: async (user) => {
+      if (cacheManagement.has(user.userId)) {
+        return cacheManagement.get(user.userId);
+      } else {
+        const data = await Users.findById(user.userId);
+        cacheManagement.set(user.userId, data);
+        return data;
+      }
     },
   },
   parentImageUrl: {

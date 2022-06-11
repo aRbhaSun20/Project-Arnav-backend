@@ -1,4 +1,5 @@
 const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
+const { cacheManagement } = require("../../middlewares/CacheModule");
 const Location = require("../../models/Location");
 const Parent = require("../../models/Parent");
 const { LocationType } = require("../Schemas/LocationSchema");
@@ -12,14 +13,23 @@ const parentLocationQuery = {
       _id: { type: GraphQLNonNull(GraphQLString) },
     },
     resolve: async (parent, args) => {
-      return Parent.findOne({ _id: args._id });
+      if (cacheManagement.has(args._id)) {
+        return cacheManagement.get(args._id);
+      } else {
+        const data = awaitParent.findById(args._id);
+        cacheManagement.set(args._id, data);
+        return data;
+      }
     },
   },
   parents: {
     type: GraphQLList(parentLocationType),
     description: "list of parent locations",
     resolve: async () => {
-      return await Parent.find();
+      const datas = await Parent.find();
+      datas.forEach((ele) => {
+        cacheManagement.set(ele._id, ele);
+      });
     },
   },
 };

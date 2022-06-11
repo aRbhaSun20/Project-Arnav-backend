@@ -1,10 +1,10 @@
 const { GraphQLNonNull, GraphQLString } = require("graphql");
 const {
   parentLocationType,
-  parentLocationSchema,
   parentOptionalSchema,
 } = require("../Schemas/parentLocationSchema");
 const Parent = require("../../models/Parent");
+const { cacheManagement } = require("../../middlewares/CacheModule");
 require("dotenv").config();
 
 const parentMutation = {
@@ -15,8 +15,9 @@ const parentMutation = {
       ...parentOptionalSchema,
     },
     resolve: async (parent, args) => {
-      const parentLoc = new Parent({ ...args });
-      return await parentLoc.save();
+      const parentLoc = await new Parent({ ...args }).save();
+      cacheManagement.set(parentLoc._id, parentLoc);
+      return parentLoc;
     },
   },
   editParent: {
@@ -27,11 +28,13 @@ const parentMutation = {
     },
     resolve: async (parent, args) => {
       const { _id, ...remaining } = args;
-      return await Parent.findOneAndUpdate(
+      const data = await Parent.findOneAndUpdate(
         { _id },
         { $set: { ...remaining } },
         { new: true }
       );
+      cacheManagement.set(data._id, data);
+      return data;
     },
   },
   deleteParent: {
@@ -43,6 +46,7 @@ const parentMutation = {
       },
     },
     resolve: async (parent, args) => {
+      if (cacheManagement.has(args._id)) cacheManagement.del(args._id);
       return await Parent.findOneAndRemove({ _id: args._id });
     },
   },

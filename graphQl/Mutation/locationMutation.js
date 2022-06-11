@@ -3,11 +3,8 @@ const {
   locationOptionalSchema,
 } = require("../Schemas/LocationSchema");
 const Location = require("../../models/Location");
-const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
-const {
-  NeighbourType,
-  NeighbourInputType,
-} = require("../Schemas/NeighbourSchema");
+const { GraphQLNonNull, GraphQLString } = require("graphql");
+const { cacheManagement } = require("../../middlewares/CacheModule");
 require("dotenv").config();
 
 const locationMutation = {
@@ -29,12 +26,13 @@ const locationMutation = {
           videoUrl,
         };
       });
-      const location = new Location({
+      const location = await new Location({
         ...remaining,
         neighborIds: resultantArr,
-      });
+      }).save();
       console.log(resultantArr, remaining);
-      return await location.save();
+      cacheManagement.set(location._id, location);
+      return location;
     },
   },
   editLocation: {
@@ -45,11 +43,13 @@ const locationMutation = {
     },
     resolve: async (parent, args) => {
       const { _id, ...remaining } = args;
-      return await Location.findOneAndUpdate(
+      const data = await Location.findOneAndUpdate(
         { _id },
         { $set: { ...remaining } },
         { new: true }
       );
+      cacheManagement.set(data._id, data);
+      return data;
     },
   },
   deleteLocation: {
@@ -61,6 +61,7 @@ const locationMutation = {
       },
     },
     resolve: async (parent, args) => {
+      if (cacheManagement.has(args._id)) cacheManagement.del(args._id);
       return await Location.findOneAndRemove({ _id: args._id });
     },
   },
