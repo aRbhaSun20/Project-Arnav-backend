@@ -87,6 +87,10 @@ const nodeOptionalSchema = {
     type: GraphQLString,
     description: "image of parent location",
   },
+  parentId: {
+    type: GraphQLString,
+    description: "parent id for the node",
+  },
   fileName: {
     type: GraphQLString,
     description: "File Name",
