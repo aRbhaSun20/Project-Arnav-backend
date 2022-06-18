@@ -23,7 +23,6 @@ let gfs, gridfsBucket;
 
 //   console.log(client.set("framework", "ReactJS"));
 // };
-console.log(process.env.MONGODBURL)
 mongoose
   .connect(process.env.MONGODBURL, {
     useNewUrlParser: true,

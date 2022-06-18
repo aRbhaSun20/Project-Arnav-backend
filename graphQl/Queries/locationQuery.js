@@ -28,16 +28,20 @@ const locationQuery = {
     type: GraphQLList(LocationType),
     description: "list of locations",
     resolve: async () => {
-      if (cacheManagement.has("locationAll")) {
-        const data = cacheManagement.get("locationAll");
-        console.log("cache from");
-        if (data) return JSON.parse(data);
-      }
-      const datas = await Location.find();
-      saveMultiple(datas, "locationAll", false);
-      return datas;
+      return await getAllLocations();
     },
   },
 };
 
-module.exports = { locationQuery };
+const getAllLocations = async () => {
+  if (cacheManagement.has("locationAll")) {
+    const data = cacheManagement.get("locationAll");
+    console.log("cache from");
+    if (data) return JSON.parse(data);
+  }
+  const datas = await Location.find();
+  saveMultiple(datas, "locationAll", false);
+  return datas;
+};
+
+module.exports = { locationQuery, getAllLocations };

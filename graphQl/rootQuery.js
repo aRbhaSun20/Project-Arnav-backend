@@ -16,8 +16,8 @@ const RootQueryType = new GraphQLObjectType({
     ...videoQuery,
     ...messageQuery,
     ...parentLocationQuery,
+    ...nodesQuery,
     ...pathQuery,
-    ...nodesQuery
   }),
 });
 

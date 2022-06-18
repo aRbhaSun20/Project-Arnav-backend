@@ -14,27 +14,14 @@ const nodesQuery = {
       _id: { type: GraphQLNonNull(GraphQLString) },
     },
     resolve: async (parent, args) => {
-      if (cacheManagement.has(args._id)) {
-        console.log("cache");
-        return cacheManagement.get(args._id);
-      } else {
-        const data = await Node.findById(args._id);
-        cacheManagement.set(args._id, data);
-        return data;
-      }
+      return await getIndiNode(args._id);
     },
   },
   nodes: {
     type: new GraphQLList(NodeType),
     description: "list of nodes",
     resolve: async (parent, args) => {
-      if (cacheManagement.has("nodeAll")) {
-        const data = cacheManagement.get("nodeAll");
-        if (data) return JSON.parse(data);
-      }
-      const datas = await Node.find();
-      saveMultiple(datas, "nodeAll");
-      return datas;
+      return await getAllNodes();
     },
   },
   getParentNodes: {
@@ -50,4 +37,25 @@ const nodesQuery = {
   },
 };
 
-module.exports = { nodesQuery };
+const getAllNodes = async () => {
+  if (cacheManagement.has("nodeAll")) {
+    const data = cacheManagement.get("nodeAll");
+    if (data) return JSON.parse(data);
+  }
+  const datas = await Node.find();
+  saveMultiple(datas, "nodeAll");
+  return datas;
+};
+
+const getIndiNode = async (sourceId) => {
+  if (cacheManagement.has(sourceId)) {
+    console.log("node cache");
+    return cacheManagement.get(sourceId);
+  } else {
+    const data = await Node.findById(sourceId);
+    cacheManagement.set(sourceId, data);
+    return data;
+  }
+};
+
+module.exports = { nodesQuery, getAllNodes, getIndiNode };

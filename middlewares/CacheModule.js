@@ -14,4 +14,13 @@ const saveMultiple = async (data, key, saveNormal = true) => {
   }
 };
 
-module.exports = { cacheManagement, setKey, saveMultiple };
+const saveSingle = async (data, key, saveNormal = true) => {
+  if (Array.isArray(data)) {
+    const rData = JSON.stringify(data);
+    console.log(rData, key);
+    cacheManagement.set(key, rData);
+  }
+  cacheManagement.set(key, data);
+};
+
+module.exports = { cacheManagement, setKey, saveMultiple, saveSingle };
