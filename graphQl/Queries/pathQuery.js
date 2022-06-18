@@ -1,15 +1,4 @@
 const { GraphQLNonNull, GraphQLString, GraphQLList } = require("graphql");
-<<<<<<< HEAD
-=======
-const { bfs } = require("../../bfs/bfs");
-const {
-  cacheManagement,
-  saveMultiple,
-} = require("../../middlewares/CacheModule");
-const Location = require("../../models/Location");
-const Message = require("../../models/Message");
-const Node = require("../../models/Node");
->>>>>>> 963eb5f74291097729718ecf90ee700779def727
 const { PathType } = require("../Schemas/PathSchema");
 const { getAllLocations } = require("./locationQuery");
 const { bfs } = require("../../bfs/bfs");
@@ -24,9 +13,6 @@ const pathQuery = {
       destinationId: { type: GraphQLNonNull(GraphQLString) },
     },
     resolve: async (parent, args) => {
-      const data = await formatData();
-      const res = await bfs(args.sourceId, args.targetId, data);
-      console.log(data, res);
       // ?logic to find path
       const returnResult = await requiredFormatData(
         args.sourceId,
@@ -40,44 +26,6 @@ const pathQuery = {
     },
   },
 };
-const cacheCheck = async () => {
-  if (cacheManagement.has("locationAll")) {
-    const data = cacheManagement.get("locationAll");
-    console.log("cache from");
-    if (data) return JSON.parse(data);
-  }
-  const datas = await Location.find();
-  saveMultiple(datas, "locationAll", false);
-  return datas;
-};
-
-const formatData = async () => {
-  const data = await cacheCheck();
-  if (Array.isArray(data)) {
-    const returnOBJ = {};
-    data.forEach((elel) => {
-      returnOBJ[elel.sourceId] = {
-        _id: elel.sourceId,
-        neighbors: [
-          ...arrayCheck(returnOBJ(elel.sourceId)),
-          ...elel.neighborIds.map((ele) => {
-            const elementId = ele.destinationId;
-            // if(elm in returnOBJ){
-            //   _id: elel.sourceId,
-            //    neighbors:[]
-            // }
-            return elementId;
-          }),
-        ],
-      };
-    });
-    return returnOBJ;
-  }
-
-  return [];
-};
-
-const arrayCheck = (data) => (Array.isArray(data.neighbors) ? data.neighbors : []);
 
 module.exports = { pathQuery };
 

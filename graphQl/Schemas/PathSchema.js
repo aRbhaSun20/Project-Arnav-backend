@@ -38,3 +38,4 @@ const PathType = new GraphQLObjectType({
 });
 
 module.exports = { PathType, PathSchema };
+
