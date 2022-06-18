@@ -53,10 +53,10 @@ const formatData = async () => {
           ...arrayCheck(returnOBJ(elel.sourceId)),
           ...elel.neighborIds.map((ele) => {
             const elementId = ele.destinationId;
-            if(elm in returnOBJ){
-              _id: elel.sourceId,
-               neighbors:[]
-            }
+            // if(elm in returnOBJ){
+            //   _id: elel.sourceId,
+            //    neighbors:[]
+            // }
             return elementId;
           }),
         ],
