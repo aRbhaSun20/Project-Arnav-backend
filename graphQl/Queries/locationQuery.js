@@ -36,7 +36,7 @@ const locationQuery = {
 const getAllLocations = async () => {
   if (cacheManagement.has("locationAll")) {
     const data = cacheManagement.get("locationAll");
-    console.log("cache from");
+    console.log("cache from location");
     if (data) return JSON.parse(data);
   }
   const datas = await Location.find();

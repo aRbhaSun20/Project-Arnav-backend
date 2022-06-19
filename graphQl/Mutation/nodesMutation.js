@@ -13,8 +13,7 @@ const nodesMutation = {
     },
     resolve: async (parent, args) => {
       const node = await new Nodes({ ...args }).save();
-      if (cacheManagement.has("nodeAll"))
-        cacheManagement.del("nodeAll");
+      if (cacheManagement.has("nodeAll")) cacheManagement.del("nodeAll");
       cacheManagement.set(setKey(node._id), node);
       return node;
     },
@@ -32,8 +31,7 @@ const nodesMutation = {
         { $set: { ...remaining } },
         { new: true }
       );
-      if (cacheManagement.has("nodeAll"))
-        cacheManagement.del("nodeAll");
+      if (cacheManagement.has("nodeAll")) cacheManagement.del("nodeAll");
       cacheManagement.set(setKey(data._id), data);
       return data;
     },
@@ -47,10 +45,8 @@ const nodesMutation = {
       },
     },
     resolve: async (parent, args) => {
-      if (cacheManagement.has(args.args._id))
-        cacheManagement.del(args.args._id);
-      if (cacheManagement.has("nodeAll"))
-        cacheManagement.del("nodeAll");
+      if (cacheManagement.has(args._id)) cacheManagement.del(args._id);
+      if (cacheManagement.has("nodeAll")) cacheManagement.del("nodeAll");
       return await Nodes.findOneAndRemove({ _id: args._id });
     },
   },

@@ -40,7 +40,10 @@ const nodesQuery = {
 const getAllNodes = async () => {
   if (cacheManagement.has("nodeAll")) {
     const data = cacheManagement.get("nodeAll");
-    if (data) return JSON.parse(data);
+    if (data) {
+      console.log("cache nodes")
+      return JSON.parse(data);
+    }
   }
   const datas = await Node.find();
   saveMultiple(datas, "nodeAll");

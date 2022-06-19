@@ -14,12 +14,15 @@ const pathQuery = {
     },
     resolve: async (parent, args) => {
       // ?logic to find path
+      console.log(
+        "-----------------------------------------------------------------"
+      );
       const returnResult = await requiredFormatData(
         args.sourceId,
         args.destinationId
       );
       if (Array.isArray(returnResult)) {
-        console.log(returnResult)
+        console.log(returnResult);
         return returnResult;
       }
       throw new Error(returnResult);
@@ -30,22 +33,25 @@ const pathQuery = {
 module.exports = { pathQuery };
 
 const getLocationsBySource = (sourceId, datas) => {
-  // if (cacheManagement.has(`${sourceId}sId`)) {
-  //   const data = cacheManagement.get(`${sourceId}sId`);
+  // console.log(datas, sourceId);
+  // if (cacheManagement.has(sourceId)) {
+  //   const data = cacheManagement.get(sourceId);
   //   if (data) return JSON.parse(data);
   // }
 
   const locationData = datas?.find((ele) => ele.sourceId === sourceId);
+  // console.log(locationData);
 
   // cacheManagement.set(`${sourceId}sId`, JSON.stringify(locationData));
   return locationData;
 };
 
-const getConnectedLocations = async (nodes, data) => {
+const getConnectedLocations = (nodes, data) => {
   const requiredNode = {};
 
   nodes.forEach((ele) => {
     const connectedLocations = getLocationsBySource(ele?._id, data);
+    // console.log(connectedLocations);
     const neighbors = connectedLocations
       ? connectedLocations.neighborIds.map((neigh) => neigh.destinationId)
       : [];
@@ -54,34 +60,39 @@ const getConnectedLocations = async (nodes, data) => {
       neighbors,
     };
   });
+  // console.log(requiredNode);
   return requiredNode;
 };
 
 const requiredFormatData = async (sourceId, destinationId) => {
   try {
     const nodeDatas = await getAllNodes();
+
     if (Array.isArray(nodeDatas)) {
       // get all locations
       const locationData = await getAllLocations();
+      // console.log(nodeDatas.length, locationData.length);
       if (locationData) {
         // get locations of sourceId
-        const nodeConnectedLocations = getLocationsBySource(
-          sourceId,
-          locationData
-        );
-        if (nodeConnectedLocations) {
-          // get location map for nodes
-          const pathDatas = await getConnectedLocations(
-            nodeDatas,
-            locationData
-          );
-          const path = getArrayData(bfs(sourceId, destinationId, pathDatas));
-          if (path) {
-            return path;
-          } else {
-            return "no path exist for the locations";
-          }
+        // const nodeConnectedLocations = getLocationsBySource(
+        //   sourceId,
+        //   locationData
+        // );
+        // if (nodeConnectedLocations) {
+        // get location map for nodes
+        nodeDatas.forEach((node) => {
+          const data = locationData.filter((ele) => ele.sourceId === node?._id);
+        });
+        console.log(locationData);
+        const pathDatas = getConnectedLocations(nodeDatas, locationData);
+        // console.log(pathDatas);
+        const path = getArrayData(bfs(sourceId, destinationId, pathDatas));
+        if (path) {
+          return path;
+        } else {
+          return "no path exist for the locations";
         }
+        // }
       } else {
         return "no locations exist";
       }
