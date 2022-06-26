@@ -29,6 +29,7 @@ const userQuery = {
       datas.forEach((ele) => {
         cacheManagement.set(setKey(ele._id), ele);
       });
+      return datas;
     },
   },
 };
